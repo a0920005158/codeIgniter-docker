@@ -29,4 +29,12 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+
+    public static function myLibrary($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('myLibrary');
+        }
+        return new \App\Libraries\MyLibrary();
+    }
 }
