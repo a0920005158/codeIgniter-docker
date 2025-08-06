@@ -37,6 +37,8 @@ abstract class BaseController extends Controller
      */
     protected $helpers = [];
 
+    protected $user = [];
+
     /**
      * Be sure to declare properties for any property fetch you initialized.
      * The creation of dynamic property is deprecated in PHP 8.2.
@@ -51,8 +53,15 @@ abstract class BaseController extends Controller
         // Do Not Edit This Line
         parent::initController($request, $response, $logger);
 
-        // Preload any models, libraries, etc, here.
+        // 登入檢查（可自由加排除路由）
+        if (!session()->get('isLoggedIn') && !in_array(uri_string(), ['login', 'register'])) {
+            return redirect()->to('/login')->send(); // 立即跳轉
+        }
 
-        // E.g.: $this->session = service('session');
+        // 已登入則載入使用者資料（可擴充成完整物件）
+        $this->user = [
+            'id'       => session()->get('user_id'),
+            'username' => session()->get('username'),
+        ];
     }
 }
